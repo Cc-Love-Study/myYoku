@@ -2,17 +2,61 @@ package main
 
 import (
 	"fmt"
+	"myYoku/conf"
 	"myYoku/controllers"
+	"myYoku/daos"
+	"myYoku/services"
+	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gopkg.in/ini.v1"
 )
 
-func main() {
-	fmt.Println("hello gin")
-	// 声明一个路由
-	r := gin.Default()
+var appConf = conf.NewAppConf()
 
-	userController := controllers.NewUserController(r, "user")
+func init() {
+	err := ini.MapTo(appConf, "./conf/conf.ini")
+	if err != nil {
+		fmt.Printf("ini文件读取失败:%v", err)
+		os.Exit(1)
+	}
+}
+
+func InitDB() *gorm.DB {
+	addr := appConf.Username + ":" + appConf.Password + "@" + "(" + appConf.DBConf.Address + ")/" + appConf.Dbname + "?charset=utf8&parseTime=True&loc=Local"
+	fmt.Println(addr)
+	db, err := gorm.Open("mysql", addr)
+	if err != nil {
+		fmt.Printf("创建数据库连接失败:%v", err)
+		os.Exit(1)
+	}
+	sqlDB := db.DB()
+	if err != nil {
+		fmt.Printf("数据库设置失败:%v", err)
+		os.Exit(1)
+	}
+	sqlDB.SetMaxIdleConns(10)           //最大空闲连接数
+	sqlDB.SetMaxOpenConns(100)          //最大连接数
+	sqlDB.SetConnMaxLifetime(time.Hour) //设置连接空闲超时
+	return db
+}
+
+func main() {
+	db := InitDB()
+	fmt.Println("数据连接成功")
+
+	/* 初始化工具类 */
+	utils := services.NewUtils(appConf.Md5Key)
+
+	/* 初始路由*/
+	r := gin.Default()
+	/* 初始化 User*/
+	userDao := daos.NewUserDao(db)
+	userService := services.NewUserService(userDao, utils)
+	userController := controllers.NewUserController(r, "user", userService)
 	userController.InitUserController()
 
 	r.Run(":8080")
