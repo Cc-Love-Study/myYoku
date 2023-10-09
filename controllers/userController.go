@@ -8,18 +8,16 @@ import (
 
 type UserController struct {
 	UserRouterGroup *gin.RouterGroup
+	UserService     *services.UserService
 }
 
-// 声明userService的结构体
-var userFunc *services.UserService = services.NewUserService()
-
 // 工厂函数
-func NewUserController(r *gin.Engine, name string) *UserController {
+func NewUserController(r *gin.Engine, name string, userService *services.UserService) *UserController {
 	rGroup := r.Group("/" + name)
-	return &UserController{UserRouterGroup: rGroup}
+	return &UserController{UserRouterGroup: rGroup, UserService: userService}
 }
 
 // 路由注册
 func (u *UserController) InitUserController() {
-	u.UserRouterGroup.GET("/register/save", userFunc.UserRegister)
+	u.UserRouterGroup.POST("/register/save", u.UserService.UserRegister)
 }
