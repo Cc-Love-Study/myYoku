@@ -57,6 +57,7 @@ func (u *UserService) UserRegister(c *gin.Context) {
 			c.JSON(http.StatusOK, u.Utils.ReturnError(4006, "创建失败"))
 			return
 		} else {
+<<<<<<< HEAD
 			c.JSON(http.StatusOK, u.Utils.ReturnSucess(2000, "创建账户成功", nil, 0))
 			return
 		}
@@ -104,5 +105,11 @@ func (u *UserService) UserLogin(c *gin.Context) {
 			}
 		}
 	}
+=======
+			c.JSON(http.StatusOK, u.Utils.ReturnError(2000, "创建账户成功"))
+			return
+		}
+	}
+>>>>>>> d956f977080147a62ec6ff97a64f693e171a03a0
 
 }
