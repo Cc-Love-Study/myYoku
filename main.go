@@ -56,8 +56,20 @@ func main() {
 	/* 初始化 User*/
 	userDao := daos.NewUserDao(db)
 	userService := services.NewUserService(userDao, utils)
-	userController := controllers.NewUserController(r, "user", userService)
+	userController := controllers.NewUserController(r, "", userService)
 	userController.InitUserController()
 
-	r.Run(":8080")
+	/* 初始化 Advert*/
+	advertDao := daos.NewAdvertDao(db)
+	advertService := services.NewAdvertService(advertDao, utils)
+	advertController := controllers.NewAdvertController(r, "advert", advertService)
+	advertController.InitAdvertController()
+
+	/* 初始化 Video*/
+	videoDao := daos.NewVideoDao(db)
+	videoService := services.NewVideoService(videoDao, utils)
+	videoController := controllers.NewVideoController(r, "video", videoService)
+	videoController.InitVideoController()
+
+	r.Run(appConf.RunConf.Address)
 }
