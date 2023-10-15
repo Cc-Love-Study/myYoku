@@ -20,7 +20,7 @@ func NewAdvertService(advertDao *daos.AdvertDao, utils *Utils) *AdvertService {
 
 func (a *AdvertService) ChannelAdvert(c *gin.Context) {
 	channelId := ""
-	channelId = c.Query("channel_id")
+	channelId = c.Query("channelId")
 	if channelId == "" {
 		c.JSON(http.StatusOK, a.Utils.ReturnError(4011, "channelId为空"))
 		return
@@ -35,7 +35,7 @@ func (a *AdvertService) ChannelAdvert(c *gin.Context) {
 			c.JSON(http.StatusOK, a.Utils.ReturnError(4013, "广告查询错误"))
 			return
 		} else {
-			c.JSON(http.StatusOK, a.Utils.ReturnSucess(2010, "查询成功", adverts, int64(len(adverts))))
+			c.JSON(http.StatusOK, a.Utils.ReturnSucess(0, "success", adverts, int64(len(adverts))))
 			return
 		}
 	}

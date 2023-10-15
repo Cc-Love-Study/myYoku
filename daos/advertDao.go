@@ -17,6 +17,9 @@ func NewAdvertDao(db *gorm.DB) *AdvertDao {
 
 func (a *AdvertDao) FindAdvert(channelId int) (error, []models.Advert) {
 	var adverts []models.Advert
-	err := a.DbOrm.Find(&adverts, "channel_id=?", channelId).Error
+	err := a.DbOrm.Where("channel_id=? AND status=1", channelId).Order("sort DESC").
+		Select([]string{"id", "title", "sub_title", "img", "add_time", "url"}).
+		First(&adverts).Error
+
 	return err, adverts
 }

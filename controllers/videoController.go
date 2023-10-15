@@ -20,6 +20,5 @@ func NewVideoController(r *gin.Engine, name string, videoService *services.Video
 // 路由注册
 func (v *VideoController) InitVideoController() {
 	// 获得广告
-	v.VideoRouterGroup.GET("/channel/advert")
-
+	v.VideoRouterGroup.GET("/channel/hot", v.VideoService.ChannelHotVideo)
 }

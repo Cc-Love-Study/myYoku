@@ -62,13 +62,13 @@ func main() {
 	/* 初始化 Advert*/
 	advertDao := daos.NewAdvertDao(db)
 	advertService := services.NewAdvertService(advertDao, utils)
-	advertController := controllers.NewAdvertController(r, "advert", advertService)
+	advertController := controllers.NewAdvertController(r, "", advertService)
 	advertController.InitAdvertController()
 
 	/* 初始化 Video*/
 	videoDao := daos.NewVideoDao(db)
 	videoService := services.NewVideoService(videoDao, utils)
-	videoController := controllers.NewVideoController(r, "video", videoService)
+	videoController := controllers.NewVideoController(r, "", videoService)
 	videoController.InitVideoController()
 
 	r.Run(appConf.RunConf.Address)
