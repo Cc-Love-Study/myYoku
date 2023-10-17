@@ -19,6 +19,12 @@ func NewVideoController(r *gin.Engine, name string, videoService *services.Video
 
 // 路由注册
 func (v *VideoController) InitVideoController() {
-	// 获得广告
+	// 获得正在热播
 	v.VideoRouterGroup.GET("/channel/hot", v.VideoService.ChannelHotVideo)
+	// 根据地区推荐地区视频
+	v.VideoRouterGroup.GET("/channel/recommend/region", v.VideoService.ChannelRecommendRegionVideo)
+	// 根据类型推荐地区视频
+	v.VideoRouterGroup.GET("/channel/recommend/type", v.VideoService.ChannelRecommendTypeVideo)
+	// 根据筛选 获取结果
+	v.VideoRouterGroup.GET("/channel/video", v.VideoService.ChannelSelectVideo)
 }

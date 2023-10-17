@@ -71,5 +71,10 @@ func main() {
 	videoController := controllers.NewVideoController(r, "", videoService)
 	videoController.InitVideoController()
 
+	/*初始化channelBase*/
+	channelBaseDao := daos.NewChannelBaseDao(db)
+	channelBaseService := services.NewChannelBaseService(channelBaseDao, utils)
+	channelBaseController := controllers.NewChannelBaseController(r, "", channelBaseService)
+	channelBaseController.InitCannelBaseController()
 	r.Run(appConf.RunConf.Address)
 }
