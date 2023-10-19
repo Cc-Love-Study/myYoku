@@ -76,5 +76,11 @@ func main() {
 	channelBaseService := services.NewChannelBaseService(channelBaseDao, utils)
 	channelBaseController := controllers.NewChannelBaseController(r, "", channelBaseService)
 	channelBaseController.InitCannelBaseController()
+
+	/*初始化comment*/
+	commentDao := daos.NewCommentDao(db)
+	commentService := services.NewCommentService(commentDao, utils)
+	commentController := controllers.NewCommentController(r, "", commentService)
+	commentController.InitCommentController()
 	r.Run(appConf.RunConf.Address)
 }

@@ -128,3 +128,49 @@ func (v *VideoService) ChannelSelectVideo(c *gin.Context) {
 		return
 	}
 }
+
+// 获得视频详情
+func (v *VideoService) GetVideoInfo(c *gin.Context) {
+	videoId := ""
+	videoId = c.Query("videoId")
+	if videoId == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4071, "videoId 为空"))
+		return
+	}
+	videoIdInt, err := strconv.Atoi(videoId)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4072, "videoId 不为数字"))
+		return
+	}
+	err, videoInfo := v.VideoDao.GetVideoInfo(videoIdInt)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4073, "videoInfo 查询失败"))
+		return
+	} else {
+		c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", videoInfo, 1))
+		return
+	}
+}
+
+// 获得视频详情
+func (v *VideoService) GetVideoEpisodesInfo(c *gin.Context) {
+	videoId := ""
+	videoId = c.Query("videoId")
+	if videoId == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4081, "videoId 为空"))
+		return
+	}
+	videoIdInt, err := strconv.Atoi(videoId)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4082, "videoId 不为数字"))
+		return
+	}
+	err, videoInfos := v.VideoDao.GetVideoEpisodes(videoIdInt)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4083, "videoInfo 查询失败"))
+		return
+	} else {
+		c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", videoInfos, int64(len(videoInfos))))
+		return
+	}
+}

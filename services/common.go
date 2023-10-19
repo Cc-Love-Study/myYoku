@@ -3,6 +3,7 @@ package services
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"time"
 )
 
 // 这个文件存放了各种返回值的格式和类型
@@ -38,4 +39,9 @@ func (u *Utils) MD5V(password string) string {
 	h := md5.New()
 	h.Write([]byte(password + u.Md5Key))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func (u *Utils) FormatTime(otime int64) string {
+	video_time := time.Unix(otime, 0)
+	return video_time.Format("2006-01-02")
 }

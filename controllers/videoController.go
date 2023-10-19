@@ -27,4 +27,8 @@ func (v *VideoController) InitVideoController() {
 	v.VideoRouterGroup.GET("/channel/recommend/type", v.VideoService.ChannelRecommendTypeVideo)
 	// 根据筛选 获取结果
 	v.VideoRouterGroup.GET("/channel/video", v.VideoService.ChannelSelectVideo)
+	// 获得视频详细消息
+	v.VideoRouterGroup.GET("/video/info", v.VideoService.GetVideoInfo)
+	// 得到视频的所以集
+	v.VideoRouterGroup.GET("/video/episodes/list", v.VideoService.GetVideoEpisodesInfo)
 }

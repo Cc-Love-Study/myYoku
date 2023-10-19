@@ -75,3 +75,15 @@ func (v *VideoDao) FindVideo(selectConditions models.SelectVideoConditions) (err
 	err := se.Limit(selectConditions.Limit).Offset(selectConditions.Offset).Find(&videos).Error
 	return err, videos
 }
+
+func (v *VideoDao) GetVideoInfo(videoId int) (error, *models.Video) {
+	videoDetail := models.NewVideo()
+	err := v.DbOrm.Where("id=? AND status=1", videoId).Limit(1).Find(videoDetail).Error
+	return err, videoDetail
+}
+
+func (v *VideoDao) GetVideoEpisodes(videoId int) (error, []models.VideoEpisodes) {
+	var videoEpisodes []models.VideoEpisodes
+	err := v.DbOrm.Where("video_id=? AND status=1", videoId).Order("num").Find(&videoEpisodes).Error
+	return err, videoEpisodes
+}

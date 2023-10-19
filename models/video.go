@@ -14,6 +14,7 @@ type Video struct {
 	RegionId           int    `gorm:"column:region_id;" `
 	TypeId             int    `gorm:"column:type_id;" `
 	EpisodesUpdateTime int    `gorm:"column:episodes_update_time;" `
+	Comment            int    `gorm:"column:comment;" `
 }
 
 func (p Video) TableName() string {
