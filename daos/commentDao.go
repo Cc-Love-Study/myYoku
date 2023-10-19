@@ -1,7 +1,6 @@
 package daos
 
 import (
-	"fmt"
 	"myYoku/models"
 	"time"
 
@@ -48,9 +47,9 @@ func (c *CommentDao) SaveComment(uid int, episodesId int, videoId int, content s
 
 // video表增加一条评论数
 func (c *CommentDao) VideoAddCommentCount(videoId int) error {
-	fmt.Println("的video评论数进行+1", videoId)
+	// fmt.Println("的video评论数进行+1", videoId)
 	err := c.DbOrm.Model(models.NewVideo()).Where("id=?", videoId).Update("comment", gorm.Expr("comment + ?", 1)).Error
-	fmt.Println("错误:", err)
+	// fmt.Println("错误:", err)
 	return err
 }
 

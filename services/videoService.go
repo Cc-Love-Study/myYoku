@@ -119,6 +119,7 @@ func (v *VideoService) ChannelSelectVideo(c *gin.Context) {
 	if selectConditions.Limit == 0 {
 		selectConditions.Limit = 12
 	}
+	// selectConditions.Limit = 17
 	err, videos := v.VideoDao.FindVideo(selectConditions)
 	if err != nil {
 		c.JSON(http.StatusOK, v.Utils.ReturnError(4062, "视频查询错误"))

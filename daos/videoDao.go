@@ -62,7 +62,6 @@ func (v *VideoDao) FindVideo(selectConditions models.SelectVideoConditions) (err
 	} else if selectConditions.End == "y" {
 		se = se.Where("is_end=?", 1)
 	}
-	se = se.Limit(selectConditions.Limit).Offset(selectConditions.Offset)
 	if selectConditions.Sort == "episodesUpdateTime" {
 		se = se.Order("episodes_update_time DESC")
 	} else if selectConditions.Sort == "comment" {
@@ -72,7 +71,8 @@ func (v *VideoDao) FindVideo(selectConditions models.SelectVideoConditions) (err
 	} else {
 		se = se.Order("add_time DESC")
 	}
-	err := se.Limit(selectConditions.Limit).Offset(selectConditions.Offset).Find(&videos).Error
+	se = se.Limit(selectConditions.Limit).Offset(selectConditions.Offset)
+	err := se.Find(&videos).Error
 	return err, videos
 }
 
