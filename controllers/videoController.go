@@ -31,4 +31,8 @@ func (v *VideoController) InitVideoController() {
 	v.VideoRouterGroup.GET("/video/info", v.VideoService.GetVideoInfo)
 	// 得到视频的所以集
 	v.VideoRouterGroup.GET("/video/episodes/list", v.VideoService.GetVideoEpisodesInfo)
+	// 获得channel排行榜信息
+	v.VideoRouterGroup.GET("/channel/top", v.VideoService.GetChannelTop)
+	// 获得type排行榜信息
+	v.VideoRouterGroup.GET("/type/top", v.VideoService.GetTypeTop)
 }

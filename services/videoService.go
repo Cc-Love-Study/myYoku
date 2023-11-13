@@ -175,3 +175,49 @@ func (v *VideoService) GetVideoEpisodesInfo(c *gin.Context) {
 		return
 	}
 }
+
+func (v *VideoService) GetChannelTop(c *gin.Context) {
+	channelId := ""
+	channelId = c.Query("channelId")
+	if channelId == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4011, "channelId为空"))
+		return
+	}
+	channelIdInt, err := strconv.Atoi(channelId)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4012, "channelId不为数字"))
+		return
+	} else {
+		err, videos := v.VideoDao.GetChannelTop(channelIdInt)
+		if err != nil {
+			c.JSON(http.StatusOK, v.Utils.ReturnError(4013, "排行榜查询错误"))
+			return
+		} else {
+			c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", videos, int64(len(videos))))
+			return
+		}
+	}
+}
+
+func (v *VideoService) GetTypeTop(c *gin.Context) {
+	typeId := ""
+	typeId = c.Query("typeId")
+	if typeId == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4011, "typeId为空"))
+		return
+	}
+	typeIdInt, err := strconv.Atoi(typeId)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4012, "typeId不为数字"))
+		return
+	} else {
+		err, videos := v.VideoDao.GetTypeTop(typeIdInt)
+		if err != nil {
+			c.JSON(http.StatusOK, v.Utils.ReturnError(4013, "排行榜查询错误"))
+			return
+		} else {
+			c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", videos, int64(len(videos))))
+			return
+		}
+	}
+}

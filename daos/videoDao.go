@@ -87,3 +87,25 @@ func (v *VideoDao) GetVideoEpisodes(videoId int) (error, []models.VideoEpisodes)
 	err := v.DbOrm.Where("video_id=? AND status=1", videoId).Order("num").Find(&videoEpisodes).Error
 	return err, videoEpisodes
 }
+
+func (v *VideoDao) GetChannelTop(channelId int) (error, []models.Video) {
+	var videos []models.Video
+	err := v.DbOrm.
+		Where("channel_id=? AND status=1", channelId).
+		Order("comment DESC").
+		Select([]string{"id", "title", "sub_title", "img", "img1", "add_time", "episodes_count", "is_end"}).
+		Limit(10).Find(&videos).Error
+
+	return err, videos
+}
+
+func (v *VideoDao) GetTypeTop(typeId int) (error, []models.Video) {
+	var videos []models.Video
+	err := v.DbOrm.
+		Where("type_id=? AND status=1", typeId).
+		Order("comment DESC").
+		Select([]string{"id", "title", "sub_title", "img", "img1", "add_time", "episodes_count", "is_end"}).
+		Limit(10).Find(&videos).Error
+
+	return err, videos
+}
