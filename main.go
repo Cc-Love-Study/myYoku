@@ -82,5 +82,14 @@ func main() {
 	commentService := services.NewCommentService(commentDao, utils)
 	commentController := controllers.NewCommentController(r, "", commentService)
 	commentController.InitCommentController()
+
+	/*批量通知消息发送*/
+	messageDao := daos.NewMessageDao(db)
+	messageService := services.NewMessageService(messageDao, utils)
+	messageController := controllers.NewMessageController(r, "", messageService)
+	messageController.InitMessageController()
+
+	/*运行*/
 	r.Run(appConf.RunConf.Address)
+
 }
