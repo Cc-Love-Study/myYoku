@@ -89,6 +89,11 @@ func main() {
 	messageController := controllers.NewMessageController(r, "", messageService)
 	messageController.InitMessageController()
 
+	/*弹幕*/
+	barrageDao := daos.NewBarrageDao(db)
+	barrageService := services.NewBarrageService(barrageDao, utils)
+	barrageController := controllers.NewBarrageController(r, "", barrageService)
+	barrageController.InitBarrageController()
 	/*运行*/
 	r.Run(appConf.RunConf.Address)
 
