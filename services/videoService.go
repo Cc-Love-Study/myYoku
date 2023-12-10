@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"myYoku/daos"
 	"myYoku/models"
 	"net/http"
@@ -111,7 +110,7 @@ func (v *VideoService) ChannelRecommendTypeVideo(c *gin.Context) {
 func (v *VideoService) ChannelSelectVideo(c *gin.Context) {
 	var selectConditions models.SelectVideoConditions
 	err := c.ShouldBindQuery(&selectConditions)
-	fmt.Println(selectConditions)
+	// fmt.Println(selectConditions)
 	if err != nil {
 		c.JSON(http.StatusOK, v.Utils.ReturnError(4061, err.Error()))
 		return
@@ -219,5 +218,71 @@ func (v *VideoService) GetTypeTop(c *gin.Context) {
 			c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", videos, int64(len(videos))))
 			return
 		}
+	}
+}
+
+func (v *VideoService) UserVideo(c *gin.Context) {
+	uid := ""
+	uid = c.Query("uid")
+	if uid == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4001, "uid为空 必须指定用户"))
+		return
+	}
+	uidInt, err := strconv.Atoi(uid)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4002, "uid错误"))
+		return
+	}
+	if uidInt == 0 {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4003, "uid为0 必须指定用户"))
+		return
+	}
+	err, videos := v.VideoDao.GetUserVideo(uidInt)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4003, "查询错误"))
+		return
+	} else {
+		c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", videos, int64(len(videos))))
+		return
+	}
+}
+
+func (v *VideoService) VideoSave(c *gin.Context) {
+	palyUrl := c.PostForm("playUrl")
+	title := c.PostForm("title")
+	subTitle := c.PostForm("subTitle")
+	channelId := c.PostForm("channelId")
+	typeId := c.PostForm("typeId")
+	regionId := c.PostForm("regionId")
+	uId := c.PostForm("uid")
+	if uId == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4001, "uid错误"))
+		return
+	}
+	uIdInt, err := strconv.Atoi(uId)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4001, "uid错误"))
+		return
+	}
+	if uIdInt == 0 {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4001, "必须登录"))
+		return
+	}
+	if palyUrl == "" {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(4002, "播放地址不可为空"))
+		return
+	}
+
+	channleIdInt, err := strconv.Atoi(channelId)
+	reginIdInt, err := strconv.Atoi(regionId)
+	typeIDInt, err := strconv.Atoi(typeId)
+
+	err = v.VideoDao.SaveVideo(uIdInt, title, subTitle, channleIdInt, reginIdInt, typeIDInt, palyUrl)
+	if err != nil {
+		c.JSON(http.StatusOK, v.Utils.ReturnError(5000, "插入失败"))
+		return
+	} else {
+		c.JSON(http.StatusOK, v.Utils.ReturnSucess(0, "success", nil, 1))
+		return
 	}
 }

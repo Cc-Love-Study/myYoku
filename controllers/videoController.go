@@ -35,4 +35,8 @@ func (v *VideoController) InitVideoController() {
 	v.VideoRouterGroup.GET("/channel/top", v.VideoService.GetChannelTop)
 	// 获得type排行榜信息
 	v.VideoRouterGroup.GET("/type/top", v.VideoService.GetTypeTop)
+	// 获得用户视频信息
+	v.VideoRouterGroup.GET("/user/video", v.VideoService.UserVideo)
+	// 保存用户上传视频信息
+	v.VideoRouterGroup.POST("/video/save", v.VideoService.VideoSave)
 }

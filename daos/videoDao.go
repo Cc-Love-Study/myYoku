@@ -2,6 +2,7 @@ package daos
 
 import (
 	"myYoku/models"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -108,4 +109,48 @@ func (v *VideoDao) GetTypeTop(typeId int) (error, []models.Video) {
 		Limit(10).Find(&videos).Error
 
 	return err, videos
+}
+
+func (v *VideoDao) GetUserVideo(uid int) (err error, videos []models.Video) {
+	err = v.DbOrm.
+		Where("user_id = ?", uid).
+		Order("add_time DESC").
+		Select([]string{"id", "title", "sub_title", "img", "img1", "add_time", "episodes_count", "is_end"}).
+		Find(&videos).Error
+	return
+}
+
+func (v *VideoDao) SaveVideo(uid int, title string, subTitle string, channleId int, regionId int, typeId int, playUrl string) (err error) {
+	video := models.NewVideo()
+	ttime := time.Now().Unix()
+
+	video.SubTitle = subTitle
+	video.Title = title
+	video.AddTime = ttime
+	video.Img = ""
+	video.Img1 = ""
+	video.EpisodesCount = 1
+	video.IsEnd = 1
+	video.Status = 1
+	video.ChannelId = channleId
+	video.RegionId = regionId
+	video.TypeId = typeId
+	video.EpisodesUpdateTime = ttime
+	video.Comment = 0
+	video.UserId = uid
+
+	err = v.DbOrm.Create(video).Error
+
+	videoEp := models.NewVideoDetail()
+	if err == nil {
+		videoEp.VideoId = video.Id
+		videoEp.Comment = 0
+		videoEp.Num = 1
+		videoEp.Status = 1
+		videoEp.PlayUrl = playUrl
+		videoEp.Title = subTitle
+		videoEp.AddTime = ttime
+		err = v.DbOrm.Create(videoEp).Error
+	}
+	return
 }

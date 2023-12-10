@@ -6,6 +6,9 @@ type VideoEpisodes struct {
 	Num           int    `gorm:"column:num;" `
 	PlayUrl       string `gorm:"column:play_url;" `
 	Comment       int    `gorm:"column:comment;" `
+	AddTime       int64  `gorm:"column:add_time;" `
+	VideoId       int    `gorm:"column:video_id;" `
+	Status        int    `gorm:"column:status;" `
 	AliYunVideoId string `gorm:"column:aliyun_video_id;" `
 }
 
