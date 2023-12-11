@@ -39,4 +39,6 @@ func (v *VideoController) InitVideoController() {
 	v.VideoRouterGroup.GET("/user/video", v.VideoService.UserVideo)
 	// 保存用户上传视频信息
 	v.VideoRouterGroup.POST("/video/save", v.VideoService.VideoSave)
+	// // 保存用户上传到阿里云视频信息
+	// v.VideoRouterGroup.POST("/video/save", v.VideoService.VideoSave)
 }

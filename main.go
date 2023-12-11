@@ -94,6 +94,13 @@ func main() {
 	barrageService := services.NewBarrageService(barrageDao, utils)
 	barrageController := controllers.NewBarrageController(r, "", barrageService)
 	barrageController.InitBarrageController()
+
+	/*阿里云*/
+	aliyunClient, _ := services.NewAliyunClient(appConf.AccessKeyId, appConf.AccessKeySecret)
+	aliyunService := services.NewAliyunService(aliyunClient)
+	aliyunController := controllers.NewAliyunController(r, "", aliyunService)
+	aliyunController.InitAliyunController()
+
 	/*运行*/
 	r.Run(appConf.RunConf.Address)
 

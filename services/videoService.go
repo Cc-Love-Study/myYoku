@@ -255,6 +255,7 @@ func (v *VideoService) VideoSave(c *gin.Context) {
 	typeId := c.PostForm("typeId")
 	regionId := c.PostForm("regionId")
 	uId := c.PostForm("uid")
+	aliYunVideoId := c.PostForm("aliyunVideoId")
 	if uId == "" {
 		c.JSON(http.StatusOK, v.Utils.ReturnError(4001, "uid错误"))
 		return
@@ -277,7 +278,7 @@ func (v *VideoService) VideoSave(c *gin.Context) {
 	reginIdInt, err := strconv.Atoi(regionId)
 	typeIDInt, err := strconv.Atoi(typeId)
 
-	err = v.VideoDao.SaveVideo(uIdInt, title, subTitle, channleIdInt, reginIdInt, typeIDInt, palyUrl)
+	err = v.VideoDao.SaveVideo(uIdInt, title, subTitle, channleIdInt, reginIdInt, typeIDInt, palyUrl, aliYunVideoId)
 	if err != nil {
 		c.JSON(http.StatusOK, v.Utils.ReturnError(5000, "插入失败"))
 		return

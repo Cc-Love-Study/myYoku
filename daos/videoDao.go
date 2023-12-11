@@ -120,7 +120,7 @@ func (v *VideoDao) GetUserVideo(uid int) (err error, videos []models.Video) {
 	return
 }
 
-func (v *VideoDao) SaveVideo(uid int, title string, subTitle string, channleId int, regionId int, typeId int, playUrl string) (err error) {
+func (v *VideoDao) SaveVideo(uid int, title string, subTitle string, channleId int, regionId int, typeId int, playUrl string, aliyunVideoId string) (err error) {
 	video := models.NewVideo()
 	ttime := time.Now().Unix()
 
@@ -150,6 +150,10 @@ func (v *VideoDao) SaveVideo(uid int, title string, subTitle string, channleId i
 		videoEp.PlayUrl = playUrl
 		videoEp.Title = subTitle
 		videoEp.AddTime = ttime
+		videoEp.AliYunVideoId = aliyunVideoId
+		if aliyunVideoId != "" {
+			videoEp.PlayUrl = ""
+		}
 		err = v.DbOrm.Create(videoEp).Error
 	}
 	return
